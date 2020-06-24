@@ -1,6 +1,7 @@
 import { setTypename } from "@lib/utils";
 
 describe("Unit | utils", function () {
+  // TODO: Do we need a unit test for this?
   it("can set the __typename of an object", function () {
     const obj = { foo: "bar" };
 
