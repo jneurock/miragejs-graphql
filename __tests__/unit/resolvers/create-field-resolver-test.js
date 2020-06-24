@@ -3,7 +3,7 @@ jest.mock("@lib/resolvers/mirage");
 import createFieldResolver from "@lib/resolvers/field";
 import mirageGraphQLFieldResolver from "@lib/resolvers/mirage";
 
-describe("Resolvers | create field resolver", function () {
+describe("Unit | resolvers | create field resolver", function () {
   test("field resolver can delegate to optional resolver", function () {
     const optionalResolvers = { Foo: { bar: jest.fn(() => {}) } };
     const fieldResolver = createFieldResolver(optionalResolvers);

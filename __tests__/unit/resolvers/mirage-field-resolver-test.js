@@ -17,7 +17,7 @@ import {
   GraphQLUnionType,
 } from "graphql";
 
-describe("Resolvers | mirage field resolver", function () {
+describe("Unit | resolvers | mirage field resolver", function () {
   const obj = {};
   const args = {};
   const context = {};
