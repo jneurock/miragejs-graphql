@@ -30,9 +30,6 @@ module.exports = {
     {
       files: [
         "jest.config.js",
-        "babel.config.js",
-        "rollup.config.js",
-        "rollup.test.config.js",
       ],
       env: {
         browser: false,
@@ -40,7 +37,10 @@ module.exports = {
       },
     },
     {
-      files: ["__tests__/**"],
+      files: [
+        "**/__mocks__/**",
+        "__tests__/**"
+      ],
       plugins: ["jest"],
       env: {
         "jest/globals": true,
@@ -52,7 +52,6 @@ module.exports = {
     "import/resolver": {
       alias: [
         ["@lib", "./lib"],
-        ["miragejs-graphql", "./index"],
       ],
       node: {
         extensions: ["js"],
