@@ -21,10 +21,6 @@ module.exports = {
     "object-shorthand": 0,
     "arrow-parens": 0,
     "no-unused-vars": ["error", { args: "none" }],
-    "import/no-extraneous-dependencies": [
-      "error",
-      { devDependencies: ["__tests__", "*.config.js"] },
-    ],
   },
   overrides: [
     {

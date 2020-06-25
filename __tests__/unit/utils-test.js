@@ -1,7 +1,10 @@
 import { GraphQLObjectType, GraphQLScalarType } from "graphql";
 import gql from "graphql-tag";
 import { setTypename } from "@lib/utils";
-import { ensureExecutableGraphQLSchema, unwrapInterfaceType } from "../../lib/utils";
+import {
+  ensureExecutableGraphQLSchema,
+  unwrapInterfaceType,
+} from "../../lib/utils";
 
 describe("Unit | utils", function () {
   describe("ensure exectuable GraphQL schema", function () {
@@ -17,6 +20,7 @@ describe("Unit | utils", function () {
       expect(foo.type).toBeInstanceOf(GraphQLObjectType);
     }
 
+    // eslint-disable-next-line jest/expect-expect
     test("if the schema is a string", function () {
       testSchema(`
       type Foo {
@@ -29,15 +33,16 @@ describe("Unit | utils", function () {
       `);
     });
 
+    // eslint-disable-next-line jest/expect-expect
     test("if the schema is an AST", function () {
       testSchema(gql`
-      type Foo {
-        bar: String
-      }
+        type Foo {
+          bar: String
+        }
 
-      type Query {
-        foo: Foo
-      }
+        type Query {
+          foo: Foo
+        }
       `);
     });
   });
@@ -59,7 +64,7 @@ describe("Unit | utils", function () {
     const info = {
       fieldNodes: [{ selectionSet: { selections: [selection] } }],
       schema: {
-        getTypeMap: () => ({ Foo })
+        getTypeMap: () => ({ Foo }),
       },
     };
 
