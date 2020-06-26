@@ -1,3 +1,4 @@
+import gql from "graphql-tag";
 import {
   GraphQLList,
   GraphQLNonNull,
@@ -5,13 +6,11 @@ import {
   GraphQLScalarType,
   buildSchema,
 } from "graphql";
-import gql from "graphql-tag";
-import { setTypename } from "@lib/utils";
 import {
   ensureExecutableGraphQLSchema,
   unwrapInterfaceType,
   unwrapType,
-} from "../../lib/utils";
+} from "@lib/utils";
 
 describe("Unit | utils", function () {
   describe("ensure exectuable GraphQL schema", function () {
@@ -25,6 +24,7 @@ describe("Unit | utils", function () {
     }
     `;
 
+    // TODO: Write the test schema and use it here
     function testSchema(schema) {
       const exectuableSchema = ensureExecutableGraphQLSchema(schema);
       const typeMap = exectuableSchema.getTypeMap();
@@ -51,14 +51,6 @@ describe("Unit | utils", function () {
     test("if the schema is already executable", function () {
       testSchema(buildSchema(schema));
     });
-  });
-
-  it("can set the __typename of an object", function () {
-    const obj = { foo: "bar" };
-
-    setTypename(obj, "Foo");
-
-    expect(obj).toEqual({ foo: "bar", __typename: "Foo" });
   });
 
   it("can unwrap an interface type based on resolver info", function () {
