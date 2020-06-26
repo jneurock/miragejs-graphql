@@ -1,13 +1,30 @@
-import { GraphQLObjectType, GraphQLScalarType } from "graphql";
+import {
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  buildSchema,
+} from "graphql";
 import gql from "graphql-tag";
 import { setTypename } from "@lib/utils";
 import {
   ensureExecutableGraphQLSchema,
   unwrapInterfaceType,
+  unwrapType,
 } from "../../lib/utils";
 
 describe("Unit | utils", function () {
   describe("ensure exectuable GraphQL schema", function () {
+    const schema = `
+    type Foo {
+      bar: String
+    }
+
+    type Query {
+      foo: Foo
+    }
+    `;
+
     function testSchema(schema) {
       const exectuableSchema = ensureExecutableGraphQLSchema(schema);
       const typeMap = exectuableSchema.getTypeMap();
@@ -22,28 +39,17 @@ describe("Unit | utils", function () {
 
     // eslint-disable-next-line jest/expect-expect
     test("if the schema is a string", function () {
-      testSchema(`
-      type Foo {
-        bar: String
-      }
-
-      type Query {
-        foo: Foo
-      }
-      `);
+      testSchema(schema);
     });
 
     // eslint-disable-next-line jest/expect-expect
     test("if the schema is an AST", function () {
-      testSchema(gql`
-        type Foo {
-          bar: String
-        }
+      testSchema(gql(schema));
+    });
 
-        type Query {
-          foo: Foo
-        }
-      `);
+    // eslint-disable-next-line jest/expect-expect
+    test("if the schema is already executable", function () {
+      testSchema(buildSchema(schema));
     });
   });
 
@@ -69,6 +75,22 @@ describe("Unit | utils", function () {
     };
 
     expect(unwrapInterfaceType(info)).toEqual(Foo);
+  });
+
+  describe("unwrap type", function () {
+    it("can unwrap non-null types", function () {
+      const type = new GraphQLObjectType({ name: "Foo" });
+      const nonNullType = new GraphQLNonNull(type);
+
+      expect(unwrapType(nonNullType)).toEqual({ isList: false, type });
+    });
+
+    it("can unwrap list types", function () {
+      const type = new GraphQLObjectType({ name: "Foo" });
+      const listType = new GraphQLList(type);
+
+      expect(unwrapType(listType)).toEqual({ isList: true, type });
+    });
   });
 
   /**
