@@ -108,10 +108,77 @@ describe("Unit | utils", function () {
 
       expect(unwrapType(nonNullListType)).toEqual({ isList: true, type });
     });
-  });
 
-  /**
-   * TODO:
-   *   - test `unwrapTypeForModels`
-   */
+    it("can unwrap Relay node types", function () {
+      const nodeType = new GraphQLObjectType({ name: "Foo" });
+      const edgeType = new GraphQLObjectType({
+        fields: { node: { type: nodeType } },
+        name: "FooEdge",
+      });
+      const edgesType = new GraphQLList(edgeType);
+      const connectionType = new GraphQLObjectType({
+        fields: { edges: { type: edgesType } },
+        name: "FooConnection",
+      });
+
+      expect(unwrapType(connectionType, { considerRelay: true })).toEqual({
+        isList: true,
+        type: nodeType,
+      });
+    });
+
+    it("can unwrap non-null Relay edges", function () {
+      const nodeType = new GraphQLObjectType({ name: "Foo" });
+      const edgeType = new GraphQLObjectType({
+        fields: { node: { type: nodeType } },
+        name: "FooEdge",
+      });
+      const edgesType = new GraphQLList(edgeType);
+      const connectionType = new GraphQLObjectType({
+        fields: { edges: { type: new GraphQLNonNull(edgesType) } },
+        name: "FooConnection",
+      });
+
+      expect(unwrapType(connectionType, { considerRelay: true })).toEqual({
+        isList: true,
+        type: nodeType,
+      });
+    });
+
+    it("can unwrap non-null Relay nodes", function () {
+      const nodeType = new GraphQLObjectType({ name: "Foo" });
+      const edgeType = new GraphQLObjectType({
+        fields: { node: { type: GraphQLNonNull(nodeType) } },
+        name: "FooEdge",
+      });
+      const edgesType = new GraphQLList(edgeType);
+      const connectionType = new GraphQLObjectType({
+        fields: { edges: { type: edgesType } },
+        name: "FooConnection",
+      });
+
+      expect(unwrapType(connectionType, { considerRelay: true })).toEqual({
+        isList: true,
+        type: nodeType,
+      });
+    });
+
+    it("can unwrap non-null Relay edges and non-null Relay nodes", function () {
+      const nodeType = new GraphQLObjectType({ name: "Foo" });
+      const edgeType = new GraphQLObjectType({
+        fields: { node: { type: new GraphQLNonNull(nodeType) } },
+        name: "FooEdge",
+      });
+      const edgesType = new GraphQLList(edgeType);
+      const connectionType = new GraphQLObjectType({
+        fields: { edges: { type: new GraphQLNonNull(edgesType) } },
+        name: "FooConnection",
+      });
+
+      expect(unwrapType(connectionType, { considerRelay: true })).toEqual({
+        isList: true,
+        type: nodeType,
+      });
+    });
+  });
 });
