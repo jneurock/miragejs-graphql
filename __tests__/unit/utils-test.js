@@ -91,11 +91,27 @@ describe("Unit | utils", function () {
 
       expect(unwrapType(listType)).toEqual({ isList: true, type });
     });
+
+    it("can unwrap a non-null list", function () {
+      const type = new GraphQLObjectType({ name: "Foo" });
+      const listType = new GraphQLList(type);
+      const nonNullType = new GraphQLNonNull(listType);
+
+      expect(unwrapType(nonNullType)).toEqual({ isList: true, type });
+    });
+
+    it("can unwrap a non-null list of non-null types", function () {
+      const type = new GraphQLObjectType({ name: "Foo" });
+      const nonNullType = new GraphQLNonNull(type);
+      const listType = new GraphQLList(nonNullType);
+      const nonNullListType = new GraphQLNonNull(listType);
+
+      expect(unwrapType(nonNullListType)).toEqual({ isList: true, type });
+    });
   });
 
   /**
    * TODO:
-   *   - test `unwrapType`
    *   - test `unwrapTypeForModels`
    */
 });
