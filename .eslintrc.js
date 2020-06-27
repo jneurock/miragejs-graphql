@@ -48,6 +48,7 @@ module.exports = {
     "import/resolver": {
       alias: [
         ["@lib", "./lib"],
+        ["@tests", "./__tests__"],
       ],
       node: {
         extensions: ["js"],
