@@ -13,13 +13,13 @@ describe("Unit | utils", function () {
 
   describe("ensure exectuable GraphQL schema", function () {
     test("if the schema is an AST", function () {
-      const { age } = typeMap.Human.getFields();
-      const { humanLeader } = typeMap.Query.getFields();
+      const { scalarField } = typeMap.TestObject.getFields();
+      const { testObject } = typeMap.Query.getFields();
 
-      expect(age.name).toBe("age");
-      expect(age.type).toBeInstanceOf(GraphQLScalarType);
-      expect(humanLeader.name).toBe("humanLeader");
-      expect(humanLeader.type).toBeInstanceOf(GraphQLObjectType);
+      expect(scalarField.name).toBe("scalarField");
+      expect(scalarField.type).toBeInstanceOf(GraphQLScalarType);
+      expect(testObject.name).toBe("testObject");
+      expect(testObject.type).toBeInstanceOf(GraphQLObjectType);
     });
 
     test("if the schema is a string", function () {
@@ -83,29 +83,31 @@ describe("Unit | utils", function () {
 
   describe("unwrap type", function () {
     it("can unwrap non-null types", function () {
-      const { type: nonNullType } = queryFields.nonHumanLeader;
-      const type = typeMap.NonHuman;
+      const { type: nonNullType } = queryFields.testObjectNonNull;
+      const type = typeMap.TestObject;
 
       expect(unwrapType(nonNullType)).toEqual({ isList: false, type });
     });
 
     it("can unwrap list types", function () {
-      const { type: listType } = queryFields.swords;
-      const type = typeMap.Sword;
+      const { type: listType } = queryFields.testObjects;
+      const type = typeMap.TestObject;
 
       expect(unwrapType(listType)).toEqual({ isList: true, type });
     });
 
     it("can unwrap a non-null list", function () {
-      const { type: nonNullListType } = queryFields.horses;
-      const type = typeMap.Horse;
+      const { type: nonNullListType } = queryFields.testObjectsNonNull;
+      const type = typeMap.TestObject;
 
       expect(unwrapType(nonNullListType)).toEqual({ isList: true, type });
     });
 
     it("can unwrap a non-null list of non-null types", function () {
-      const { type: nonNullListOfNonNullType } = queryFields.locations;
-      const type = typeMap.Location;
+      const {
+        type: nonNullListOfNonNullType,
+      } = queryFields.testObjectsNestedNonNull;
+      const type = typeMap.TestObject;
 
       expect(unwrapType(nonNullListOfNonNullType)).toEqual({
         isList: true,
@@ -114,8 +116,8 @@ describe("Unit | utils", function () {
     });
 
     it("can unwrap Relay node types", function () {
-      const { type: connectionType } = queryFields.accessories;
-      const nodeType = typeMap.Accessory;
+      const { type: connectionType } = queryFields.testRelayConnection;
+      const nodeType = typeMap.TestRelayNode;
 
       expect(unwrapType(connectionType, { considerRelay: true })).toEqual({
         isList: true,
@@ -123,9 +125,23 @@ describe("Unit | utils", function () {
       });
     });
 
-    it("can unwrap non-null Relay edges and non-null Relay nodes", function () {
-      const { type: connectionType } = queryFields.humans;
-      const nonNullNodeType = typeMap.Human;
+    it("can unwrap non-null Relay edges", function () {
+      const {
+        type: connectionType,
+      } = queryFields.testNonNullEdgesRelayConnection;
+      const nonNullNodeType = typeMap.TestRelayNode;
+
+      expect(unwrapType(connectionType, { considerRelay: true })).toEqual({
+        isList: true,
+        type: nonNullNodeType,
+      });
+    });
+
+    it("can unwrap non-null Relay nodes", function () {
+      const {
+        type: connectionType,
+      } = queryFields.testNonNullNodesRelayConnection;
+      const nonNullNodeType = typeMap.TestRelayNode;
 
       expect(unwrapType(connectionType, { considerRelay: true })).toEqual({
         isList: true,

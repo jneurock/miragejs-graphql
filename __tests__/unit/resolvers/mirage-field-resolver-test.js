@@ -1,3 +1,8 @@
+/**
+ * TODO:
+ *   - Use the test schema
+ */
+
 jest.mock("@lib/resolvers/default");
 jest.mock("@lib/resolvers/list");
 jest.mock("@lib/resolvers/object");
