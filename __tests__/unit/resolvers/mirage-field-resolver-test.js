@@ -79,14 +79,13 @@ describe("Unit | resolvers | mirage field resolver", function () {
 
     it("can resolve interface types", function () {
       const type = typeMap.TestRelayConnection;
-      const { type: interfaceType } = queryFields.testRelayConnection;
       const selection = {
         kind: "InlineFragment",
         typeCondition: { name: { value: "TestRelayConnection" } },
       };
       const info = {
         fieldNodes: [{ selectionSet: { selections: [selection] } }],
-        returnType: interfaceType,
+        returnType: queryFields.testRelayConnection.type,
         schema: graphQLSchema,
       };
 
