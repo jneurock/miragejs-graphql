@@ -1,34 +1,24 @@
-/**
- * TODO:
- *   - Use the test schema
- */
-
 jest.mock("@lib/resolvers/default");
 jest.mock("@lib/resolvers/list");
 jest.mock("@lib/resolvers/object");
 jest.mock("@lib/resolvers/union");
 
+import { graphQLSchema } from "@tests/gql/schema";
 import mirageGraphQLFieldResolver from "@lib/resolvers/mirage";
 import resolveDefault from "@lib/resolvers/default";
 import resolveList from "@lib/resolvers/list";
 import resolveObject from "@lib/resolvers/object";
 import resolveUnion from "@lib/resolvers/union";
-import {
-  GraphQLInterfaceType,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLObjectType,
-  GraphQLScalarType,
-  GraphQLUnionType,
-} from "graphql";
 
 describe("Unit | resolvers | mirage field resolver", function () {
   const obj = {};
   const args = {};
   const context = {};
+  const typeMap = graphQLSchema.getTypeMap();
+  const queryFields = typeMap.Query.getFields();
 
   describe("object types", function () {
-    const type = new GraphQLObjectType({ name: "Foo" });
+    const { type } = queryFields.testObject;
 
     it("can resolve an object type", function () {
       const info = { returnType: type };
@@ -45,7 +35,7 @@ describe("Unit | resolvers | mirage field resolver", function () {
     });
 
     it("can resolve a non-null object type", function () {
-      const nonNullType = new GraphQLNonNull(type);
+      const { type: nonNullType } = queryFields.testObjectNonNull;
       const info = { returnType: nonNullType };
 
       mirageGraphQLFieldResolver(obj, args, context, info);
@@ -60,7 +50,7 @@ describe("Unit | resolvers | mirage field resolver", function () {
     });
 
     it("can resolve a list of objects", function () {
-      const listType = new GraphQLList(type);
+      const { type: listType } = queryFields.testObjects;
       const info = { returnType: listType };
 
       mirageGraphQLFieldResolver(obj, args, context, info);
@@ -71,10 +61,10 @@ describe("Unit | resolvers | mirage field resolver", function () {
 
   describe("polymorphic types", function () {
     it("can resolve union types", function () {
-      const type1 = new GraphQLObjectType({ name: "Foo" });
-      const type2 = new GraphQLObjectType({ name: "Bar" });
-      const unionType = new GraphQLUnionType(type1, type2);
-      const info = { returnType: unionType };
+      const {
+        type: { ofType: unionType },
+      } = queryFields.testUnion;
+      const info = { returnType: queryFields.testUnion.type };
 
       mirageGraphQLFieldResolver(obj, args, context, info);
 
@@ -87,17 +77,17 @@ describe("Unit | resolvers | mirage field resolver", function () {
       );
     });
 
-    it("can resolver interface types", function () {
-      const type = new GraphQLObjectType({ name: "Foo" });
-      const interfaceType = new GraphQLInterfaceType(type);
+    it("can resolve interface types", function () {
+      const type = typeMap.TestNode;
+      const { type: interfaceType } = queryFields.testNode;
       const selection = {
         kind: "InlineFragment",
-        typeCondition: { name: { value: "Foo" } },
+        typeCondition: { name: { value: "TestNode" } },
       };
       const info = {
         fieldNodes: [{ selectionSet: { selections: [selection] } }],
         returnType: interfaceType,
-        schema: { getTypeMap: () => ({ Foo: type }) },
+        schema: graphQLSchema,
       };
 
       mirageGraphQLFieldResolver(obj, args, context, info);
@@ -114,7 +104,7 @@ describe("Unit | resolvers | mirage field resolver", function () {
 
   describe("scalar types", function () {
     it("can resolve scalar types", function () {
-      const type = new GraphQLScalarType({ name: "Int", parseValue: 1 });
+      const { type } = queryFields.testScalar;
       const info = { returnType: type };
 
       mirageGraphQLFieldResolver(obj, args, context, info);
@@ -123,8 +113,7 @@ describe("Unit | resolvers | mirage field resolver", function () {
     });
 
     it("can resolve non-null scalar types", function () {
-      const type = new GraphQLScalarType({ name: "Int", parseValue: 1 });
-      const nonNullType = new GraphQLNonNull(type);
+      const { type: nonNullType } = queryFields.testScalarNonNull;
       const info = { returnType: nonNullType };
 
       mirageGraphQLFieldResolver(obj, args, context, info);

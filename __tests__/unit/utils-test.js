@@ -1,5 +1,5 @@
-import { GraphQLObjectType, GraphQLScalarType, buildSchema } from "graphql";
-import graphQLSchema from "@tests/gql/schema";
+import { GraphQLObjectType, GraphQLScalarType } from "graphql";
+import { graphQLSchemaAST, graphQLSchema } from "@tests/gql/schema";
 import {
   ensureExecutableGraphQLSchema,
   unwrapInterfaceType,
@@ -7,12 +7,10 @@ import {
 } from "@lib/utils";
 
 describe("Unit | utils", function () {
-  const schema = ensureExecutableGraphQLSchema(graphQLSchema);
-  const typeMap = schema.getTypeMap();
-  const queryFields = typeMap.Query.getFields();
-
   describe("ensure exectuable GraphQL schema", function () {
-    test("if the schema is an AST", function () {
+    function testSchema(schemaToTest) {
+      const schema = ensureExecutableGraphQLSchema(schemaToTest);
+      const typeMap = schema.getTypeMap();
       const { scalarField } = typeMap.TestObject.getFields();
       const { testObject } = typeMap.Query.getFields();
 
@@ -20,48 +18,29 @@ describe("Unit | utils", function () {
       expect(scalarField.type).toBeInstanceOf(GraphQLScalarType);
       expect(testObject.name).toBe("testObject");
       expect(testObject.type).toBeInstanceOf(GraphQLObjectType);
+    }
+
+    // eslint-disable-next-line jest/expect-expect
+    test("if the schema is an AST", function () {
+      testSchema(graphQLSchemaAST);
     });
 
+    // eslint-disable-next-line jest/expect-expect
     test("if the schema is a string", function () {
-      const schema = `
-      type Foo {
-        bar: String
-      }
-
+      testSchema(`
       type Query {
-        foo: Foo
+        testObject: TestObject
       }
-      `;
-      const exectuableSchema = ensureExecutableGraphQLSchema(schema);
-      const typeMap = exectuableSchema.getTypeMap();
-      const { bar } = typeMap.Foo.getFields();
-      const { foo } = typeMap.Query.getFields();
-
-      expect(bar.name).toBe("bar");
-      expect(bar.type).toBeInstanceOf(GraphQLScalarType);
-      expect(foo.name).toBe("foo");
-      expect(foo.type).toBeInstanceOf(GraphQLObjectType);
-    });
-
-    test("if the schema is already executable", function () {
-      const schema = buildSchema(`
-      type Foo {
-        bar: String
-      }
-
-      type Query {
-        foo: Foo
+      
+      type TestObject {
+        scalarField: String
       }
       `);
-      const exectuableSchema = ensureExecutableGraphQLSchema(schema);
-      const typeMap = exectuableSchema.getTypeMap();
-      const { bar } = typeMap.Foo.getFields();
-      const { foo } = typeMap.Query.getFields();
+    });
 
-      expect(bar.name).toBe("bar");
-      expect(bar.type).toBeInstanceOf(GraphQLScalarType);
-      expect(foo.name).toBe("foo");
-      expect(foo.type).toBeInstanceOf(GraphQLObjectType);
+    // eslint-disable-next-line jest/expect-expect
+    test("if the schema is already executable", function () {
+      testSchema(graphQLSchema);
     });
   });
 
@@ -82,6 +61,9 @@ describe("Unit | utils", function () {
   });
 
   describe("unwrap type", function () {
+    const typeMap = graphQLSchema.getTypeMap();
+    const queryFields = typeMap.Query.getFields();
+
     it("can unwrap non-null types", function () {
       const { type: nonNullType } = queryFields.testObjectNonNull;
       const type = typeMap.TestObject;
