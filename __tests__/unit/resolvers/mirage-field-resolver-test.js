@@ -78,11 +78,11 @@ describe("Unit | resolvers | mirage field resolver", function () {
     });
 
     it("can resolve interface types", function () {
-      const type = typeMap.TestNode;
-      const { type: interfaceType } = queryFields.testNode;
+      const type = typeMap.TestRelayConnection;
+      const { type: interfaceType } = queryFields.testRelayConnection;
       const selection = {
         kind: "InlineFragment",
-        typeCondition: { name: { value: "TestNode" } },
+        typeCondition: { name: { value: "TestRelayConnection" } },
       };
       const info = {
         fieldNodes: [{ selectionSet: { selections: [selection] } }],

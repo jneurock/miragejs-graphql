@@ -14,10 +14,6 @@ interface RelayEdge {
   cursor: String!
 }
 
-interface RelayNode {
-  id: ID!
-}
-
 type Mutation {
   createTestObject(input: TestObjectInput!): TestObject
   deleteTestObject(id: ID!): Boolean
@@ -33,8 +29,6 @@ type PageInfo {
 }
 
 type Query {
-  node(id: ID!): Node!
-  testNode: TestNode
   testObject(id: ID!): TestObject
   testObjectNonNull(id: ID!): TestObject!
   testObjects: [TestObject]
@@ -77,19 +71,15 @@ type TestCategory {
   name: String!
 }
 
-type TestNode implements Node {
-  name: String!
-}
-
 type TestObject {
   id: ID!
-  category: TestCategory
-  categoryNonNull: TestCategory!
+  belongsToField: TestCategory
+  belongsToNonNullField: TestCategory!
+  hasManyField: [TestOption]
+  hasManyNonNullField: [TestOption]!
+  hasManyNestedNonNullField: [TestOption!]!
   interfaceField: Node
   interfaceNonNullField: Node!
-  optionsField: [TestOption]
-  optionsNonNullField: [TestOption]!
-  optionNestedNonNullField: [TestOption!]!
   relayConnectionField: TestRelayConnection
   relayConnectionNonNullField: TestRelayConnection!
   scalarField: String
@@ -99,6 +89,10 @@ type TestObject {
   unionNestedNonNullField: [TestUnion!]!
 }
 
+type TestNode implements Node {
+  id: ID!
+}
+
 type TestOption {
   id: ID!
   name: String!
@@ -106,25 +100,31 @@ type TestOption {
 
 type TestRelayConnection implements RelayConnection {
   edges: [TestRelayEdge]
+  pageInfo: PageInfo!
 }
 
 type TestNonNullEdgesRelayConnection implements RelayConnection {
   edges: [TestRelayEdge!]!
+  pageInfo: PageInfo!
 }
 
 type TestNonNullNodesRelayConnection implements RelayConnection {
   edges: [TestNonNullNodesRelayEdge]
+  pageInfo: PageInfo!
 }
 
 type TestRelayEdge implements RelayEdge {
+  cursor: String!
   node: TestRelayNode
 }
 
 type TestNonNullNodesRelayEdge implements RelayEdge {
+  cursor: String!
   node: TestRelayNode!
 }
 
 type TestRelayNode implements Node {
+  id: ID!
   name: String!
 }
 
