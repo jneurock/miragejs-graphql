@@ -1,7 +1,7 @@
 import { ensureModels } from "@lib/orm/models";
 import { graphQLSchema } from "@tests/gql/schema";
 
-describe("Unit | orm | models", function () {
+describe("Unit | ORM | models", function () {
   const registeredModels = {};
   const mirageSchema = {
     hasModelForModelName: () => false,
