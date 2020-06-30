@@ -1,10 +1,6 @@
 import { GraphQLObjectType, GraphQLScalarType } from "graphql";
 import { graphQLSchemaAST, graphQLSchema } from "@tests/gql/schema";
-import {
-  ensureExecutableGraphQLSchema,
-  unwrapInterfaceType,
-  unwrapType,
-} from "@lib/utils";
+import { ensureExecutableGraphQLSchema, unwrapType } from "@lib/utils";
 
 describe("Unit | utils", function () {
   describe("ensure exectuable GraphQL schema", function () {
@@ -42,22 +38,6 @@ describe("Unit | utils", function () {
     test("if the schema is already executable", function () {
       testSchema(graphQLSchema);
     });
-  });
-
-  it("can unwrap an interface type based on resolver info", function () {
-    const Foo = {};
-    const selection = {
-      kind: "InlineFragment",
-      typeCondition: { name: { value: "Foo" } },
-    };
-    const info = {
-      fieldNodes: [{ selectionSet: { selections: [selection] } }],
-      schema: {
-        getTypeMap: () => ({ Foo }),
-      },
-    };
-
-    expect(unwrapInterfaceType(info)).toEqual(Foo);
   });
 
   describe("unwrap type", function () {

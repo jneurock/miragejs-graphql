@@ -1,6 +1,7 @@
 jest.mock("@lib/resolvers/default");
 jest.mock("@lib/resolvers/list");
 jest.mock("@lib/resolvers/object");
+jest.mock("@lib/resolvers/interface");
 jest.mock("@lib/resolvers/union");
 
 import { graphQLSchema } from "@tests/gql/schema";
@@ -8,6 +9,7 @@ import mirageGraphQLFieldResolver from "@lib/resolvers/mirage";
 import resolveDefault from "@lib/resolvers/default";
 import resolveList from "@lib/resolvers/list";
 import resolveObject from "@lib/resolvers/object";
+import resolveInterface from "@lib/resolvers/interface";
 import resolveUnion from "@lib/resolvers/union";
 
 describe("Unit | resolvers | mirage field resolver", function () {
@@ -77,29 +79,20 @@ describe("Unit | resolvers | mirage field resolver", function () {
       );
     });
 
-    // TODO: Resolving interface types needs to be refactored
-    // it("can resolve interface types", function () {
-    //   const type = typeMap.TestRelayConnection;
-    //   const selection = {
-    //     kind: "InlineFragment",
-    //     typeCondition: { name: { value: "TestRelayConnection" } },
-    //   };
-    //   const info = {
-    //     fieldNodes: [{ selectionSet: { selections: [selection] } }],
-    //     returnType: queryFields.testRelayConnection.type,
-    //     schema: graphQLSchema,
-    //   };
+    it("can resolve interface types", function () {
+      const type = typeMap.Node;
+      const info = { returnType: queryFields.testInterface.type };
 
-    //   mirageGraphQLFieldResolver(obj, args, context, info);
+      mirageGraphQLFieldResolver(obj, args, context, info);
 
-    //   expect(resolveObject).toHaveBeenCalledWith(
-    //     obj,
-    //     args,
-    //     context,
-    //     info,
-    //     type
-    //   );
-    // });
+      expect(resolveInterface).toHaveBeenCalledWith(
+        obj,
+        args,
+        context,
+        info,
+        type
+      );
+    });
   });
 
   describe("scalar types", function () {

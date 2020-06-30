@@ -29,6 +29,8 @@ type PageInfo {
 }
 
 type Query {
+  testInterface: Node
+  testInterfaceNonNull: Node!
   testObject(id: ID!): TestObject
   testObjectNonNull(id: ID!): TestObject!
   testObjects: [TestObject]
