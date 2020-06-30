@@ -39,7 +39,19 @@ type Query {
     last: Int
     before: String
     after: String
-  ): RelayConnection
+  ): TestRelayConnection
+  testNonNullEdgesRelayConnection(
+    first: Int
+    last: Int
+    before: String
+    after: String
+  ): TestNonNullEdgesRelayConnection
+  testNonNullNodesRelayConnection(
+    first: Int
+    last: Int
+    before: String
+    after: String
+  ): TestNonNullNodesRelayConnection
   testScalar: String
   testScalarNonNull: String!
   testScalarOptionalResolve: String
