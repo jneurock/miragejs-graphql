@@ -29,6 +29,7 @@ type PageInfo {
 }
 
 type Query {
+  testContext: String
   testInterface: Node
   testInterfaceNonNull: Node!
   testObject(id: ID!): TestObject

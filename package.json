@@ -44,6 +44,7 @@
     "eslint-plugin-jest": "^23.6.0",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "graphql-request": "^2.0.0",
     "graphql-tag": "^2.10.3",
     "jest": "^26.0.1",
     "jest-transform-graphql": "^2.1.0",
