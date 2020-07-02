@@ -1,11 +1,10 @@
-import { createConnection, encode, createRecords } from "./test-support";
 import {
+  getEdges,
+  getPageInfo,
   getRelayArgs,
   isRelayConnectionType,
   isRelayEdgeType,
   isRelayType,
-  setEdges,
-  setPageInfo,
 } from "@lib/relay-pagination";
 
 describe("Unit | Relay pagination", function () {
@@ -74,19 +73,15 @@ describe("Unit | Relay pagination", function () {
     });
   });
 
-  describe("set page info of a connection", function () {
+  describe("page info", function () {
     test("when previous page", function () {
-      const connection = createConnection({
-        edges: [
-          { cursor: 11, node: { id: 11 } },
-          { cursor: 12, node: { id: 12 } },
-        ],
-      });
       const records = [{ id: 1 }, { id: 12 }];
+      const edges = [
+        { cursor: 11, node: { id: 11 } },
+        { cursor: 12, node: { id: 12 } },
+      ];
 
-      setPageInfo(connection, records);
-
-      expect(connection.pageInfo).toEqual({
+      expect(getPageInfo(records, edges)).toEqual({
         hasPreviousPage: true,
         hasNextPage: false,
         startCursor: 11,
@@ -95,17 +90,13 @@ describe("Unit | Relay pagination", function () {
     });
 
     test("when next page", function () {
-      const connection = createConnection({
-        edges: [
-          { cursor: 1, node: { id: 1 } },
-          { cursor: 2, node: { id: 2 } },
-        ],
-      });
       const records = [{ id: 1 }, { id: 3 }];
+      const edges = [
+        { cursor: 1, node: { id: 1 } },
+        { cursor: 2, node: { id: 2 } },
+      ];
 
-      setPageInfo(connection, records);
-
-      expect(connection.pageInfo).toEqual({
+      expect(getPageInfo(records, edges)).toEqual({
         hasPreviousPage: false,
         hasNextPage: true,
         startCursor: 1,
@@ -114,17 +105,13 @@ describe("Unit | Relay pagination", function () {
     });
 
     test("when both previous and next page", function () {
-      const connection = createConnection({
-        edges: [
-          { cursor: 2, node: { id: 2 } },
-          { cursor: 3, node: { id: 3 } },
-        ],
-      });
       const records = [{ id: 1 }, { id: 4 }];
+      const edges = [
+        { cursor: 2, node: { id: 2 } },
+        { cursor: 3, node: { id: 3 } },
+      ];
 
-      setPageInfo(connection, records);
-
-      expect(connection.pageInfo).toEqual({
+      expect(getPageInfo(records, edges)).toEqual({
         hasPreviousPage: true,
         hasNextPage: true,
         startCursor: 2,
@@ -133,17 +120,13 @@ describe("Unit | Relay pagination", function () {
     });
 
     test("when neither previous or next page", function () {
-      const connection = createConnection({
-        edges: [
-          { cursor: 1, node: { id: 1 } },
-          { cursor: 2, node: { id: 2 } },
-        ],
-      });
       const records = [{ id: 1 }, { id: 2 }];
+      const edges = [
+        { cursor: 1, node: { id: 1 } },
+        { cursor: 2, node: { id: 2 } },
+      ];
 
-      setPageInfo(connection, records);
-
-      expect(connection.pageInfo).toEqual({
+      expect(getPageInfo(records, edges)).toEqual({
         hasPreviousPage: false,
         hasNextPage: false,
         startCursor: 1,
@@ -153,14 +136,25 @@ describe("Unit | Relay pagination", function () {
   });
 
   describe("set edges of a connection", function () {
+    const encode = (id) => id;
+
+    function createRecords(n) {
+      let i = 1;
+      const records = [];
+
+      while (i <= n) {
+        records.push({ id: `${i}`, foo: `bar${i}` });
+        i++;
+      }
+
+      return records;
+    }
+
     test("with no args", function () {
       const args = {};
-      const connection = createConnection();
       const records = createRecords(1);
 
-      setEdges(connection, records, args, "Foo", encode);
-
-      expect(connection.edges).toEqual([
+      expect(getEdges(records, args, "Foo", encode)).toEqual([
         {
           cursor: "Foo:1",
           node: { id: "1", foo: "bar1" },
@@ -170,12 +164,9 @@ describe("Unit | Relay pagination", function () {
 
     test("with first/after args", function () {
       const args = { first: 2, after: "Foo:2" };
-      const connection = createConnection();
       const records = createRecords(5);
 
-      setEdges(connection, records, args, "Foo", encode);
-
-      expect(connection.edges).toEqual([
+      expect(getEdges(records, args, "Foo", encode)).toEqual([
         {
           cursor: "Foo:3",
           node: { id: "3", foo: "bar3" },
@@ -189,12 +180,9 @@ describe("Unit | Relay pagination", function () {
 
     test("with last/before args", function () {
       const args = { last: 2, before: "Foo:4" };
-      const connection = createConnection();
       const records = createRecords(5);
 
-      setEdges(connection, records, args, "Foo", encode);
-
-      expect(connection.edges).toEqual([
+      expect(getEdges(records, args, "Foo", encode)).toEqual([
         {
           cursor: "Foo:2",
           node: { id: "2", foo: "bar2" },
@@ -208,12 +196,9 @@ describe("Unit | Relay pagination", function () {
 
     test("with first/before args", function () {
       const args = { first: 3, before: "Foo:3" };
-      const connection = createConnection();
       const records = createRecords(5);
 
-      setEdges(connection, records, args, "Foo", encode);
-
-      expect(connection.edges).toEqual([
+      expect(getEdges(records, args, "Foo", encode)).toEqual([
         {
           cursor: "Foo:1",
           node: { id: "1", foo: "bar1" },
@@ -227,12 +212,9 @@ describe("Unit | Relay pagination", function () {
 
     test("with last/after args", function () {
       const args = { last: 3, after: "Foo:3" };
-      const connection = createConnection();
       const records = createRecords(5);
 
-      setEdges(connection, records, args, "Foo", encode);
-
-      expect(connection.edges).toEqual([
+      expect(getEdges(records, args, "Foo", encode)).toEqual([
         {
           cursor: "Foo:4",
           node: { id: "4", foo: "bar4" },
