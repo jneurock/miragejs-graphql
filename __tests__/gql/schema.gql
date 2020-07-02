@@ -1,5 +1,5 @@
 input TestObjectInput {
-  name: String
+  size: String
 }
 
 interface Node {
@@ -17,7 +17,7 @@ interface RelayEdge {
 type Mutation {
   createTestObject(input: TestObjectInput!): TestObject
   deleteTestObject(id: ID!): Boolean
-  optionallyMutateTestObject(id: ID!, input: TestObjectInput!): TestObject
+  optionallyMutateTestObject(id: ID!, input: TestObjectInput!): TestObject #Tested
   updateTestObject(id: ID!, input: TestObjectInput!): TestObject
 }
 
