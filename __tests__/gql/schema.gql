@@ -29,14 +29,14 @@ type PageInfo {
 }
 
 type Query {
-  testContext: String
+  testContext: String #Tested
   testInterface: Node
   testInterfaceNonNull: Node!
-  testObject(id: ID!): TestObject
-  testObjectNonNull(id: ID!): TestObject!
-  testObjects: [TestObject]
-  testObjectsNonNull: [TestObject]!
-  testObjectsNestedNonNull: [TestObject!]!
+  testObject(id: ID!): TestObject #Tested
+  testObjectNonNull(id: ID!): TestObject! #Tested
+  testObjects(size: String): [TestObject] #Tested
+  testObjectsNonNull(size: String): [TestObject]! #Tested
+  testObjectsNestedNonNull(size: String): [TestObject!]! #Tested
   testRelayConnection(
     first: Int
     last: Int
@@ -55,9 +55,9 @@ type Query {
     before: String
     after: String
   ): TestNonNullNodesRelayConnection
-  testScalar: String
-  testScalarNonNull: String!
-  testScalarOptionalResolve: String
+  testScalar: String #Tested
+  testScalarNonNull: String! #Tested
+  testScalarOptionalResolve: String #Tested
   testUnion: [TestUnion]
   testUnionNonNull: [TestUnion]!
   testUnionNestedNonNull: [TestUnion!]!
@@ -81,6 +81,7 @@ type TestObject {
   relayConnectionNonNullField: TestRelayConnection!
   scalarField: String
   scalarNonNullField: String!
+  size: String
   unionField: [TestUnion]
   unionNonNullField: [TestUnion]!
   unionNestedNonNullField: [TestUnion!]!
