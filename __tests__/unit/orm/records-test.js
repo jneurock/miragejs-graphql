@@ -77,8 +77,7 @@ describe("Unit | ORM | records", function () {
     });
 
     it("can get, filter and adapt records", function () {
-      // Since `x` isn't a field of the Foo type, it's ignored when filtering
-      const records = getRecords(type, { name: "Foo1", x: "x" }, mirageSchema);
+      const records = getRecords(type, { name: "Foo1" }, mirageSchema);
 
       expect(mirageSchema.toCollectionName).toHaveBeenCalledWith("Foo");
       expect(mirageSchema.foos.where).toHaveBeenCalledWith({ name: "Foo1" });

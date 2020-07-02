@@ -62,9 +62,9 @@ type Query {
   testScalarNonNull: String! #Tested
   testScalarOptionalResolve: String #Tested
   testSortedObjects: [TestObject] #Tested
-  testUnion(oneName: String, twoName: String): [TestUnion]
-  testUnionNonNull(oneName: String, twoName: String): [TestUnion]!
-  testUnionNestedNonNull(oneName: String, twoName: String): [TestUnion!]!
+  testUnion(oneName: String, twoName: String): [TestUnion] #Tested
+  testUnionNonNull(oneName: String, twoName: String): [TestUnion]! #Tested
+  testUnionNestedNonNull(oneName: String, twoName: String): [TestUnion!]! #Tested
 }
 
 type TestCategory {
