@@ -15,12 +15,13 @@ export function query(queryDocument, { url = "/graphql", variables } = {}) {
 
 export const mutate = query;
 
-export function startServer() {
+export function startServer({ resolvers } = {}) {
   const server = new Server({
     routes() {
       const testGraphQLHandler = createGraphQLHandler({
         graphQLSchema,
         mirageSchema: this.schema,
+        resolvers,
       });
       const scalarTestGraphQLHandler = createGraphQLHandler({
         context: { foo: "foo" },
