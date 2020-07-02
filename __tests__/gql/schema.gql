@@ -38,23 +38,26 @@ type Query {
   testObjectsNonNull(size: String): [TestObject]! #Tested
   testObjectsNestedNonNull(size: String): [TestObject!]! #Tested
   testRelayConnection(
+    color: String
     first: Int
     last: Int
     before: String
     after: String
-  ): TestRelayConnection
+  ): TestRelayConnection #Tested
   testNonNullEdgesRelayConnection(
+    color: String
     first: Int
     last: Int
     before: String
     after: String
-  ): TestNonNullEdgesRelayConnection
+  ): TestNonNullEdgesRelayConnection #Tested
   testNonNullNodesRelayConnection(
+    color: String
     first: Int
     last: Int
     before: String
     after: String
-  ): TestNonNullNodesRelayConnection
+  ): TestNonNullNodesRelayConnection #Tested
   testScalar: String #Tested
   testScalarNonNull: String! #Tested
   testScalarOptionalResolve: String #Tested
@@ -124,7 +127,7 @@ type TestNonNullNodesRelayEdge implements RelayEdge {
 
 type TestRelayNode implements Node {
   id: ID!
-  name: String!
+  color: String
 }
 
 type TestUnionOne {

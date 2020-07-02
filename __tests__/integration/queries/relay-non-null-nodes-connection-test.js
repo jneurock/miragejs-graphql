@@ -1,9 +1,9 @@
-import relayConnectionQuery from "@tests/gql/queries/relay-connection.gql";
+import relayNonNullNodesConnectionQuery from "@tests/gql/queries/relay-non-null-nodes-connection.gql";
 import { query, startServer } from "@tests/integration/setup";
 
 let server;
 
-describe("Integration | queries | Relay connection", function () {
+describe("Integration | queries | Relay connection (non-null edges and nodes)", function () {
   beforeEach(function () {
     server = startServer();
 
@@ -15,10 +15,12 @@ describe("Integration | queries | Relay connection", function () {
     server.shutdown();
   });
 
-  test("query for Relay connection", async function () {
-    const { testRelayConnection } = await query(relayConnectionQuery);
+  test("query for Relay connection with non-null nodes", async function () {
+    const { testNonNullNodesRelayConnection } = await query(
+      relayNonNullNodesConnectionQuery
+    );
 
-    expect(testRelayConnection).toEqual({
+    expect(testNonNullNodesRelayConnection).toEqual({
       edges: [
         {
           cursor: "VGVzdFJlbGF5Tm9kZTox",
@@ -42,13 +44,16 @@ describe("Integration | queries | Relay connection", function () {
     });
   });
 
-  describe("filtering", function () {
+  describe("filtering non-null nodes", function () {
     test("query for Relay connection by color", async function () {
-      const { testRelayConnection } = await query(relayConnectionQuery, {
-        variables: { color: "blue" },
-      });
+      const { testNonNullNodesRelayConnection } = await query(
+        relayNonNullNodesConnectionQuery,
+        {
+          variables: { color: "blue" },
+        }
+      );
 
-      expect(testRelayConnection).toEqual({
+      expect(testNonNullNodesRelayConnection).toEqual({
         edges: [
           {
             cursor: "VGVzdFJlbGF5Tm9kZTox",
@@ -65,11 +70,14 @@ describe("Integration | queries | Relay connection", function () {
     });
 
     test("query for Relay connection by first/after", async function () {
-      const { testRelayConnection } = await query(relayConnectionQuery, {
-        variables: { first: 1, after: "VGVzdFJlbGF5Tm9kZTox" },
-      });
+      const { testNonNullNodesRelayConnection } = await query(
+        relayNonNullNodesConnectionQuery,
+        {
+          variables: { first: 1, after: "VGVzdFJlbGF5Tm9kZTox" },
+        }
+      );
 
-      expect(testRelayConnection).toEqual({
+      expect(testNonNullNodesRelayConnection).toEqual({
         edges: [
           {
             cursor: "VGVzdFJlbGF5Tm9kZToy",
@@ -86,11 +94,14 @@ describe("Integration | queries | Relay connection", function () {
     });
 
     test("query for Relay connection by last/before", async function () {
-      const { testRelayConnection } = await query(relayConnectionQuery, {
-        variables: { last: 1, before: "VGVzdFJlbGF5Tm9kZToz" },
-      });
+      const { testNonNullNodesRelayConnection } = await query(
+        relayNonNullNodesConnectionQuery,
+        {
+          variables: { last: 1, before: "VGVzdFJlbGF5Tm9kZToz" },
+        }
+      );
 
-      expect(testRelayConnection).toEqual({
+      expect(testNonNullNodesRelayConnection).toEqual({
         edges: [
           {
             cursor: "VGVzdFJlbGF5Tm9kZToy",
