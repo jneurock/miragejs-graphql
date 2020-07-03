@@ -49,8 +49,8 @@ describe("Unit | ORM | models", function () {
     });
 
     // eslint-disable-next-line jest/expect-expect
-    it("belongs to test node", function () {
-      testRelationship("interfaceField", "BelongsTo", "node", {
+    it("belongs to test interface", function () {
+      testRelationship("interfaceField", "BelongsTo", "test-interface", {
         isPolymorphic: true,
       });
     });

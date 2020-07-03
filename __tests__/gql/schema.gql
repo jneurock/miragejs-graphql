@@ -2,24 +2,17 @@ input TestObjectInput {
   size: String
 }
 
-interface Node {
+interface TestInterface {
   id: ID!
-}
-
-interface RelayConnection {
-  pageInfo: PageInfo!
-}
-
-interface RelayEdge {
-  cursor: String!
+  label: String!
 }
 
 type Mutation {
-  createTestObject(input: TestObjectInput!): TestObject #Tested
-  deleteTestObject(id: ID!): TestObject #Tested
-  optionallyMutateTestObject(id: ID!, input: TestObjectInput!): TestObject #Tested
-  unimplemented: TestObject #Tested
-  updateTestObject(id: ID!, input: TestObjectInput!): TestObject #Tested
+  createTestObject(input: TestObjectInput!): TestObject
+  deleteTestObject(id: ID!): TestObject
+  optionallyMutateTestObject(id: ID!, input: TestObjectInput!): TestObject
+  unimplemented: TestObject
+  updateTestObject(id: ID!, input: TestObjectInput!): TestObject
 }
 
 type PageInfo {
@@ -30,47 +23,58 @@ type PageInfo {
 }
 
 type Query {
-  testContext: String #Tested
-  testInterface: Node
-  testInterfaceNonNull: Node!
-  testObject(id: ID!): TestObject #Tested
-  testObjectNonNull(id: ID!): TestObject! #Tested
-  testObjects(size: String): [TestObject] #Tested
-  testObjectsNonNull(size: String): [TestObject]! #Tested
-  testObjectsNestedNonNull(size: String): [TestObject!]! #Tested
+  testContext: String
+  testInterface(id: ID, label: String): TestInterface
+  testInterfaceNonNull(id: ID, label: String): TestInterface!
+  testObject(id: ID!): TestObject
+  testObjectNonNull(id: ID!): TestObject!
+  testObjects(size: String): [TestObject]
+  testObjectsNonNull(size: String): [TestObject]!
+  testObjectsNestedNonNull(size: String): [TestObject!]!
   testRelayConnection(
     color: String
     first: Int
     last: Int
     before: String
     after: String
-  ): TestRelayConnection #Tested
+  ): TestRelayConnection
   testNonNullEdgesRelayConnection(
     color: String
     first: Int
     last: Int
     before: String
     after: String
-  ): TestNonNullEdgesRelayConnection #Tested
+  ): TestNonNullEdgesRelayConnection
   testNonNullNodesRelayConnection(
     color: String
     first: Int
     last: Int
     before: String
     after: String
-  ): TestNonNullNodesRelayConnection #Tested
-  testScalar: String #Tested
-  testScalarNonNull: String! #Tested
-  testScalarOptionalResolve: String #Tested
-  testSortedObjects: [TestObject] #Tested
-  testUnion(oneName: String, twoName: String): [TestUnion] #Tested
-  testUnionNonNull(oneName: String, twoName: String): [TestUnion]! #Tested
-  testUnionNestedNonNull(oneName: String, twoName: String): [TestUnion!]! #Tested
+  ): TestNonNullNodesRelayConnection
+  testScalar: String
+  testScalarNonNull: String!
+  testScalarOptionalResolve: String
+  testSortedObjects: [TestObject]
+  testUnion(oneName: String, twoName: String): [TestUnion]
+  testUnionNonNull(oneName: String, twoName: String): [TestUnion]!
+  testUnionNestedNonNull(oneName: String, twoName: String): [TestUnion!]!
 }
 
 type TestCategory {
   id: ID!
   name: String!
+}
+
+type TestImplOne implements TestInterface {
+  id: ID!
+  description: String
+  label: String!
+}
+
+type TestImplTwo implements TestInterface {
+  id: ID!
+  label: String!
 }
 
 type TestObject {
@@ -80,8 +84,8 @@ type TestObject {
   hasManyField: [TestOption]
   hasManyNonNullField: [TestOption]!
   hasManyNestedNonNullField: [TestOption!]!
-  interfaceField: Node
-  interfaceNonNullField: Node!
+  interfaceField: TestInterface
+  interfaceNonNullField: TestInterface!
   relayConnectionField: TestRelayConnection
   relayConnectionNonNullField: TestRelayConnection!
   scalarField: String
@@ -92,41 +96,37 @@ type TestObject {
   unionNestedNonNullField: [TestUnion!]!
 }
 
-type TestNode implements Node {
-  id: ID!
-}
-
 type TestOption {
   id: ID!
   name: String!
 }
 
-type TestRelayConnection implements RelayConnection {
+type TestRelayConnection {
   edges: [TestRelayEdge]
   pageInfo: PageInfo!
 }
 
-type TestNonNullEdgesRelayConnection implements RelayConnection {
+type TestNonNullEdgesRelayConnection {
   edges: [TestRelayEdge!]!
   pageInfo: PageInfo!
 }
 
-type TestNonNullNodesRelayConnection implements RelayConnection {
+type TestNonNullNodesRelayConnection {
   edges: [TestNonNullNodesRelayEdge]
   pageInfo: PageInfo!
 }
 
-type TestRelayEdge implements RelayEdge {
+type TestRelayEdge {
   cursor: String!
   node: TestRelayNode
 }
 
-type TestNonNullNodesRelayEdge implements RelayEdge {
+type TestNonNullNodesRelayEdge {
   cursor: String!
   node: TestRelayNode!
 }
 
-type TestRelayNode implements Node {
+type TestRelayNode {
   id: ID!
   color: String
 }

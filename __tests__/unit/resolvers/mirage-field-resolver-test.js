@@ -80,7 +80,7 @@ describe("Unit | resolvers | mirage field resolver", function () {
     });
 
     it("can resolve interface types", function () {
-      const type = typeMap.Node;
+      const type = typeMap.TestInterface;
       const info = { returnType: queryFields.testInterface.type };
 
       mirageGraphQLFieldResolver(obj, args, context, info);
