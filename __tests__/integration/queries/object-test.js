@@ -14,20 +14,22 @@ describe("Integration | queries | object", function () {
   });
 
   test("query for test object", async function () {
-    const object = server.create("test-object");
+    server.create("test-object");
+
     const { testObject } = await query(objectQuery, {
-      variables: { id: object.id },
+      variables: { id: "1" },
     });
 
-    expect(testObject).toEqual({ id: object.id });
+    expect(testObject).toEqual({ id: "1" });
   });
 
   test("query for non-null test object", async function () {
-    const object = server.create("test-object");
+    server.create("test-object");
+
     const { testObjectNonNull } = await query(objectNonNullQuery, {
-      variables: { id: object.id },
+      variables: { id: "1" },
     });
 
-    expect(testObjectNonNull).toEqual({ id: object.id });
+    expect(testObjectNonNull).toEqual({ id: "1" });
   });
 });

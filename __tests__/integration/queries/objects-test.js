@@ -15,17 +15,11 @@ describe("Integration | queries | objects", function () {
   });
 
   test("query for test objects", async function () {
-    const objects = server.createList("test-object", 2);
+    server.createList("test-object", 2);
+
     const { testObjects } = await query(objectsQuery);
 
-    expect(testObjects).toEqual([
-      {
-        id: objects[0].id,
-      },
-      {
-        id: objects[1].id,
-      },
-    ]);
+    expect(testObjects).toEqual([{ id: "1" }, { id: "2" }]);
   });
 
   test("query for filtering test objects", async function () {
@@ -45,17 +39,11 @@ describe("Integration | queries | objects", function () {
 
   describe("non-null", function () {
     test("query for test objects", async function () {
-      const objects = server.createList("test-object", 2);
+      server.createList("test-object", 2);
+
       const { testObjectsNonNull } = await query(objectsQueryNonNull);
 
-      expect(testObjectsNonNull).toEqual([
-        {
-          id: objects[0].id,
-        },
-        {
-          id: objects[1].id,
-        },
-      ]);
+      expect(testObjectsNonNull).toEqual([{ id: "1" }, { id: "2" }]);
     });
 
     test("query for filtering test objects", async function () {
@@ -76,19 +64,13 @@ describe("Integration | queries | objects", function () {
 
   describe("nested non-null", function () {
     test("query for test objects", async function () {
-      const objects = server.createList("test-object", 2);
+      server.createList("test-object", 2);
+
       const { testObjectsNestedNonNull } = await query(
         objectsQueryNestedNonNull
       );
 
-      expect(testObjectsNestedNonNull).toEqual([
-        {
-          id: objects[0].id,
-        },
-        {
-          id: objects[1].id,
-        },
-      ]);
+      expect(testObjectsNestedNonNull).toEqual([{ id: "1" }, { id: "2" }]);
     });
 
     test("query for filtering test objects", async function () {

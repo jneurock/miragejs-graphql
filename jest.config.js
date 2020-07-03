@@ -1,6 +1,15 @@
 module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ["lib/**/*.js"],
+  coveragePathIgnorePatterns: [
+    "<rootDir>/lib/resolvers/default.js",
+    "<rootDir>/lib/resolvers/index.js",
+  ],
+  coverageThreshold: {
+    global: {
+      lines: 90,
+    },
+  },
   moduleNameMapper: {
     "^@lib/(.*)$": "<rootDir>/lib/$1",
     "^@tests/(.*)$": "<rootDir>/__tests__/$1",

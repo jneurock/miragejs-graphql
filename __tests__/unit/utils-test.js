@@ -7,11 +7,11 @@ describe("Unit | utils", function () {
     function testSchema(schemaToTest) {
       const schema = ensureExecutableGraphQLSchema(schemaToTest);
       const typeMap = schema.getTypeMap();
-      const { scalarField } = typeMap.TestObject.getFields();
+      const { size } = typeMap.TestObject.getFields();
       const { testObject } = typeMap.Query.getFields();
 
-      expect(scalarField.name).toBe("scalarField");
-      expect(scalarField.type).toBeInstanceOf(GraphQLScalarType);
+      expect(size.name).toBe("size");
+      expect(size.type).toBeInstanceOf(GraphQLScalarType);
       expect(testObject.name).toBe("testObject");
       expect(testObject.type).toBeInstanceOf(GraphQLObjectType);
     }
@@ -29,7 +29,7 @@ describe("Unit | utils", function () {
       }
       
       type TestObject {
-        scalarField: String
+        size: String
       }
       `);
     });

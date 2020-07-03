@@ -4,9 +4,9 @@ jest.mock("@lib/resolvers/object");
 jest.mock("@lib/resolvers/interface");
 jest.mock("@lib/resolvers/union");
 
+import defaultFieldResolver from "@lib/resolvers/default";
 import { graphQLSchema } from "@tests/gql/schema";
 import mirageGraphQLFieldResolver from "@lib/resolvers/mirage";
-import resolveDefault from "@lib/resolvers/default";
 import resolveList from "@lib/resolvers/list";
 import resolveObject from "@lib/resolvers/object";
 import resolveInterface from "@lib/resolvers/interface";
@@ -102,7 +102,12 @@ describe("Unit | resolvers | mirage field resolver", function () {
 
       mirageGraphQLFieldResolver(obj, args, context, info);
 
-      expect(resolveDefault).toHaveBeenCalledWith(obj, args, context, info);
+      expect(defaultFieldResolver).toHaveBeenCalledWith(
+        obj,
+        args,
+        context,
+        info
+      );
     });
 
     it("can resolve non-null scalar types", function () {
@@ -111,7 +116,12 @@ describe("Unit | resolvers | mirage field resolver", function () {
 
       mirageGraphQLFieldResolver(obj, args, context, info);
 
-      expect(resolveDefault).toHaveBeenCalledWith(obj, args, context, info);
+      expect(defaultFieldResolver).toHaveBeenCalledWith(
+        obj,
+        args,
+        context,
+        info
+      );
     });
   });
 });

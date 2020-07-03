@@ -1,4 +1,3 @@
-import { Server } from "miragejs";
 import mirageGraphQLFieldResolver from "@lib/resolvers/mirage";
 import sortedObjectsQuery from "@tests/gql/queries/sorted-objects.gql";
 import { query, startServer } from "@tests/integration/setup";
