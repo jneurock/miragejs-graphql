@@ -15,10 +15,11 @@ interface RelayEdge {
 }
 
 type Mutation {
-  createTestObject(input: TestObjectInput!): TestObject
-  deleteTestObject(id: ID!): Boolean
+  createTestObject(input: TestObjectInput!): TestObject #Tested
+  deleteTestObject(id: ID!): TestObject #Tested
   optionallyMutateTestObject(id: ID!, input: TestObjectInput!): TestObject #Tested
-  updateTestObject(id: ID!, input: TestObjectInput!): TestObject
+  unimplemented: TestObject #Tested
+  updateTestObject(id: ID!, input: TestObjectInput!): TestObject #Tested
 }
 
 type PageInfo {

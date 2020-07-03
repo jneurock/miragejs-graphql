@@ -3,7 +3,15 @@ import { mutate, startServer } from "@tests/integration/setup";
 
 describe("Integration | mutations | optional", function () {
   it("can run optional mutations", async function () {
-    const server = startServer();
+    const server = startServer({
+      resolvers: {
+        Mutation: {
+          optionallyMutateTestObject(_obj, { id, input }, context) {
+            return context.mirageSchema.db.testObjects.update(id, input);
+          },
+        },
+      },
+    });
 
     server.create("test-object", { size: "S" });
 

@@ -21,14 +21,7 @@ export function startServer({ resolvers } = {}) {
       const testGraphQLHandler = createGraphQLHandler({
         graphQLSchema,
         mirageSchema: this.schema,
-        resolvers: {
-          Mutation: {
-            optionallyMutateTestObject(_obj, { id, input }, context) {
-              return context.mirageSchema.db.testObjects.update(id, input);
-            },
-          },
-          ...resolvers,
-        },
+        resolvers,
       });
       const scalarTestGraphQLHandler = createGraphQLHandler({
         context: { foo: "foo" },
