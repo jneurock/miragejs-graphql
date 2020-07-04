@@ -13,15 +13,13 @@ import createFieldResolver from "@lib/resolvers/field";
 import { createGraphQLHandler } from "@lib/handler";
 import { ensureExecutableGraphQLSchema } from "@lib/utils";
 import { ensureModels } from "@lib/orm/models";
-import { graphql } from "graphql";
+import { graphql } from "graphql"; // eslint-disable-line no-unused-vars
 
 describe("Unit | handler", function () {
   const graphQLSchema = {};
   const mirageSchema = {};
   const resolvers = {};
-  const graphQLHandler = createGraphQLHandler({
-    graphQLSchema,
-    mirageSchema,
+  const graphQLHandler = createGraphQLHandler(graphQLSchema, mirageSchema, {
     resolvers,
   });
 

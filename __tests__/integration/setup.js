@@ -18,26 +18,28 @@ export const mutate = query;
 export function startServer({ resolvers } = {}) {
   const server = new Server({
     routes() {
-      const testGraphQLHandler = createGraphQLHandler({
+      const testGraphQLHandler = createGraphQLHandler(
         graphQLSchema,
-        mirageSchema: this.schema,
-        resolvers,
-      });
-      const scalarTestGraphQLHandler = createGraphQLHandler({
-        context: { foo: "foo" },
+        this.schema,
+        { resolvers }
+      );
+      const scalarTestGraphQLHandler = createGraphQLHandler(
         graphQLSchema,
-        mirageSchema: this.schema,
-        resolvers: {
-          Query: {
-            testContext: (_obj, _args, context) => context.foo,
-            testScalarOptionalResolve: () => "foo",
+        this.schema,
+        {
+          context: { foo: "foo" },
+          resolvers: {
+            Query: {
+              testContext: (_obj, _args, context) => context.foo,
+              testScalarOptionalResolve: () => "foo",
+            },
           },
-        },
-        root: {
-          testScalar: "foo",
-          testScalarNonNull: "foo",
-        },
-      });
+          root: {
+            testScalar: "foo",
+            testScalarNonNull: "foo",
+          },
+        }
+      );
 
       this.post("/graphql-scalars", scalarTestGraphQLHandler);
       this.post("/graphql", testGraphQLHandler);
