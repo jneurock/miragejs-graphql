@@ -14,9 +14,9 @@ import { createGraphQLHandler } from "@lib/handler";
 import { ensureExecutableGraphQLSchema } from "@lib/utils";
 import { ensureModels } from "@lib/orm/models";
 import { graphql } from "graphql"; // eslint-disable-line no-unused-vars
+import { graphQLSchema } from "@tests/unit/setup";
 
 describe("Unit | handler", function () {
-  const graphQLSchema = {};
   const mirageSchema = {};
   const resolvers = {};
   const graphQLHandler = createGraphQLHandler(graphQLSchema, mirageSchema, {
